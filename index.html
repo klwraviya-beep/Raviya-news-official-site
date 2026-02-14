@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAVIYA NEWS | Official Global Network</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #c0392b;
+            --accent: #2980b9;
+            --bg: #f4f7f6;
+            --header: #ffffff;
+            --card: #ffffff;
+            --text-title: #2d3436;
+            --text-body: #636e72;
+            --sidebar: #1e272e;
+        }
+
+        [data-theme="dark"] {
+            --bg: #0a0b10;
+            --header: #14161f;
+            --card: #1c1f2b;
+            --text-title: #f1f2f6;
+            --text-body: #a4b0be;
+            --sidebar: #050505;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Noto Sans Sinhala', sans-serif; }
+        body { background-color: var(--bg); color: var(--text-title); transition: 0.3s; overflow-x: hidden; }
+
+        /* --- BRANDING TYPOGRAPHY --- */
+        .brand-text {
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+            line-height: 1;
+        }
+        .brand-raviya { color: var(--text-title); }
+        .brand-news { color: var(--primary); }
+
+        /* Logo Image Styles */
+        .circle-logo {
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: transform 0.5s ease;
+        }
+        .sidebar-img:hover { transform: rotate(360deg); }
+
+        /* --- 1. ADVANCED PRE-LOADER (SPLASH) --- */
+        #splash {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0a0b10; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 10000;
+        }
+        .splash-branding {
+            display: flex; flex-direction: column; align-items: center;
+            margin-bottom: 30px;
+        }
+        .splash-img { width: 120px; height: 120px; margin-bottom: 15px; }
+        
+        /* Splash Text Styling */
+        .splash-text .brand-raviya { font-size: 2.5rem; color: #ffffff; letter-spacing: 1px; }
+        .splash-text .brand-news { font-size: 2.5rem; letter-spacing: 1px; }
+
+        .progress-container { width: 220px; height: 3px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; }
+        .progress-bar { width: 0%; height: 100%; background: var(--primary); animation: load 1.8s ease-in-out forwards; }
+        @keyframes load { to { width: 100%; } }
+
+        /* --- 2. OFFICIAL TOP BAR & TICKER --- */
+        .top-info-bar { background: #000; color: #fff; padding: 6px 5%; display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; z-index: 1001; position: relative; }
+        .ticker-wrap { flex-grow: 1; margin: 0 40px; overflow: hidden; white-space: nowrap; }
+        .ticker-move { display: inline-block; animation: ticker 30s linear infinite; }
+        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
+        /* --- 3. PREMIUM STICKY HEADER --- */
+        header { 
+            background: var(--header);
+            border-bottom: 3px solid var(--primary); 
+            position: sticky; top: 0; z-index: 1000; 
+            padding: 12px 5%; transition: 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .header-main { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        
+        .menu-trigger { cursor: pointer; display: flex; flex-direction: column; gap: 6px; width: 28px; transition: 0.3s; }
+        .menu-trigger span { width: 100%; height: 3px; background: var(--text-title); border-radius: 4px; transition: 0.3s; }
+
+        /* Main Header Logo Text */
+        .logo-main-link { text-decoration: none; display: flex; align-items: center; gap: 5px; font-size: 1.8rem; }
+
+        .clock-box { font-size: 0.9rem; font-weight: 800; padding: 5px 12px; border-radius: 6px; background: rgba(0,0,0,0.05); }
+
+        /* --- 4. ADVANCED SCROLLABLE SIDEBAR --- */
+        #sidebar {
+            position: fixed; top: 0; left: -320px; width: 320px; height: 100%;
+            background: var(--sidebar); color: #fff; z-index: 1002;
+            transition: 0.5s cubic-bezier(0.85, 0, 0.15, 1);
+            padding: 25px 20px; box-shadow: 20px 0 50px rgba(0,0,0,0.4);
+            overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--primary) transparent;
+        }
+        #sidebar::-webkit-scrollbar { width: 5px; }
+        #sidebar::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+        #sidebar.open { left: 0; }
+        
+        /* Sidebar Header Branding */
+        .sidebar-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; }
+        .sidebar-brand-group { display: flex; align-items: center; gap: 12px; }
+        .sidebar-img { width: 55px; height: 55px; }
+        
+        /* Sidebar Text Styling */
+        .sidebar-text { display: flex; flex-direction: column; }
+        .sidebar-text .brand-raviya { font-size: 1.3rem; color: #ffffff; }
+        .sidebar-text .brand-news { font-size: 1.3rem; }
+
+        .close-sidebar { font-size: 2rem; cursor: pointer; color: rgba(255,255,255,0.7); transition: 0.3s; }
+        .close-sidebar:hover { color: var(--primary); }
+
+        .cat-heading { font-size: 0.75rem; font-weight: 800; color: var(--primary); text-transform: uppercase; margin: 25px 0 10px; letter-spacing: 1px; }
+        .nav-link { 
+            display: block; width: 100%; padding: 12px 15px; margin-bottom: 8px;
+            background: rgba(255,255,255,0.03); border: none; color: #a4b0be; text-align: left;
+            font-size: 0.95rem; font-weight: 600; cursor: pointer; border-radius: 10px;
+            transition: 0.3s;
+        }
+        .nav-link:hover { background: var(--primary); color: #fff; padding-left: 20px; }
+        .nav-link.active { background: var(--primary); color: #fff; box-shadow: 0 4px 15px rgba(192, 57, 43, 0.4); }
+
+        #overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); z-index: 1001; display: none;
+            backdrop-filter: blur(5px);
+        }
+
+        /* --- 5. MAIN CONTENT --- */
+        main { max-width: 1400px; margin: 30px auto; padding: 0 5%; }
+        .view-info { margin-bottom: 30px; border-left: 6px solid var(--primary); padding-left: 15px; }
+        .view-info h2 { font-size: 1.4rem; font-weight: 800; text-transform: uppercase; }
+
+        .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 25px; }
+
+        /* --- 6. NEWS CARD --- */
+        .news-card { background: var(--card); border-radius: 16px; overflow: hidden; border: 1px solid var(--border); transition: 0.4s ease; display: flex; flex-direction: column; }
+        .news-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
+        
+        .img-wrap { position: relative; height: 215px; }
+        .img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+        .src-badge { position: absolute; top: 15px; left: 15px; padding: 5px 12px; background: var(--primary); color: white; font-size: 0.65rem; font-weight: 800; border-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+
+        .card-content { padding: 22px; flex-grow: 1; }
+        .card-title { font-size: 1.1rem; font-weight: 700; line-height: 1.45; margin-bottom: 12px; }
+        .card-desc { font-size: 0.88rem; color: var(--text-body); line-height: 1.6; }
+
+        .card-footer { padding: 15px 22px; border-top: 1px solid var(--border); background: rgba(0,0,0,0.02); display: flex; justify-content: space-between; align-items: center; }
+        .read-more-btn { text-decoration: none; font-weight: 800; font-size: 0.8rem; color: var(--primary); }
+
+        /* SKELETON */
+        .skeleton { background: linear-gradient(90deg, var(--border) 25%, var(--bg) 50%, var(--border) 75%); background-size: 200% 100%; animation: skeleton-anim 1.5s infinite; }
+        @keyframes skeleton-anim { to { background-position: -200% 0; } }
+
+        @media (max-width: 768px) {
+            .logo-main-link { font-size: 1.5rem; }
+            .ticker-wrap { display: none; }
+            .news-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body data-theme="light">
+
+<div id="splash">
+    <div class="splash-branding">
+        <img src="https://files.catbox.moe/9zghs4.jpg" alt="Raviya News Logo" class="circle-logo splash-img">
+        <div class="brand-text splash-text">
+            <span class="brand-raviya">RAVIYA</span>
+            <span class="brand-news">NEWS</span>
+        </div>
+    </div>
+    <div class="progress-container"><div class="progress-bar"></div></div>
+    <p style="color: #888; font-size: 0.65rem; font-weight: 700; letter-spacing: 2px; margin-top: 20px; text-transform: uppercase;">Connecting to Global Servers...</p>
+</div>
+
+<div class="top-info-bar">
+    <div style="color: var(--primary)">● LIVE UPDATES</div>
+    <div class="ticker-wrap">
+        <div class="ticker-move" id="ticker-content">
+            RAVIYA NEWS: Real-time global headlines are being synchronized... Stay tuned for the latest updates from all sources.
+        </div>
+    </div>
+    <div id="mode-text" onclick="toggleTheme()" style="cursor:pointer">🌙 DARK MODE</div>
+</div>
+
+<div id="overlay" onclick="toggleSidebar()"></div>
+
+<aside id="sidebar">
+    <div class="sidebar-header">
+        <div class="sidebar-brand-group">
+            <img src="https://files.catbox.moe/9zghs4.jpg" alt="Raviya News Logo" class="circle-logo sidebar-img">
+            <div class="brand-text sidebar-text">
+                <span class="brand-raviya">RAVIYA</span>
+                <span class="brand-news">NEWS</span>
+            </div>
+        </div>
+        <div class="close-sidebar" onclick="toggleSidebar()">×</div>
+    </div>
+    
+    <p class="cat-heading">Local Desk (දේශීය)</p>
+    <button class="nav-link active" onclick="loadNews('derana', this)">Ada Derana</button>
+    <button class="nav-link" onclick="loadNews('hiru', this)">Hiru News</button>
+    <button class="nav-link" onclick="loadNews('newsfirst', this)">NewsFirst</button>
+    <button class="nav-link" onclick="loadNews('lankadeepa', this)">Lankadeepa</button>
+
+    <p class="cat-heading">International (ජාත්‍යන්තර)</p>
+    <button class="nav-link" onclick="loadNews('bbc-world', this)">BBC World</button>
+    <button class="nav-link" onclick="loadNews('cnn', this)">CNN News</button>
+    <button class="nav-link" onclick="loadNews('reuters', this)">Reuters</button>
+    <button class="nav-link" onclick="loadNews('aljazeera', this)">Al Jazeera</button>
+
+    <p class="cat-heading">Lifestyle & More (වෙනත්)</p>
+    <button class="nav-link" onclick="loadNews('bbc-si', this)">BBC Sinhala</button>
+    <button class="nav-link" onclick="loadNews('gossip', this)">Gossip Lanka</button>
+
+    <div style="height: 50px;"></div> </aside>
+
+<header>
+    <div class="header-main">
+        <div class="menu-trigger" onclick="toggleSidebar()">
+            <span></span><span></span><span></span>
+        </div>
+        <a href="#" class="logo-main-link brand-text" onclick="location.reload()">
+            <span class="brand-raviya">RAVIYA</span>
+            <span class="brand-news">NEWS</span>
+        </a>
+        <div class="header-right">
+            <div id="clock" class="clock-box">00:00:00</div>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="view-info">
+        <h2 id="activeSource">TOP STORIES | ADA DERANA</h2>
+    </div>
+    <div id="newsGrid" class="news-grid"></div>
+</main>
+
+<script>
+    const apiMap = {
+        derana: { url: 'https://chama-api-hub.vercel.app/api/news/adaderana?apikey=chama_f7b61e81701eeb7e860025e9f5af4f77', name: 'Ada Derana' },
+        hiru: { url: 'https://chama-api-hub.vercel.app/api/news/hiru?apikey=chama_f7b61e81701eeb7e860025e9f5af4f77', name: 'Hiru News' },
+        newsfirst: { url: 'https://chama-api-hub.vercel.app/api/news/newsfirst?apikey=chama_f7b61e81701eeb7e860025e9f5af4f77', name: 'NewsFirst' },
+        lankadeepa: { url: 'https://chama-api-hub.vercel.app/api/news/lankadeepa?apikey=chama_f7b61e81701eeb7e860025e9f5af4f77', name: 'Lankadeepa' },
+        'bbc-si': { url: 'https://chama-api-hub.vercel.app/api/news/bbc?apikey=chama_f7b61e81701eeb7e860025e9f5af4f77', name: 'BBC Sinhala' },
+        'bbc-world': { url: 'https://chama-api-hub.vercel.app/api/news/bbcworld?apikey=chama_f7b61e81701eeb7e860025e9f5af4f77', name: 'BBC World' },
+        aljazeera: { url: 'https://chama-api-hub.vercel.app/api/news/aljazeera?apikey=chama_f7b61e81701eeb7e860025e9f5af4f77', name: 'Al Jazeera' },
+        reuters: { url: 'https://chama-api-hub.vercel.app/api/news/reuters?apikey=chama_f7b61e81701eeb7e860025e9f5af4f77', name: 'Reuters' },
+        cnn: { url: 'https://chama-api-hub.vercel.app/api/news/cnn?apikey=chama_f7b61e81701eeb7e860025e9f5af4f77', name: 'CNN' },
+        gossip: { url: 'https://chama-api-hub.vercel.app/api/news/gossiplankanews?apikey=chama_f7b61e81701eeb7e860025e9f5af4f77', name: 'Gossip Lanka' }
+    };
+
+    let activeKey = 'derana';
+
+    // Timer
+    setInterval(() => {
+        document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+    }, 1000);
+
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const isOpen = sidebar.classList.toggle('open');
+        overlay.style.display = isOpen ? 'block' : 'none';
+    }
+
+    async function loadNews(key, btn) {
+        const grid = document.getElementById('newsGrid');
+        activeKey = key;
+
+        if(btn) {
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            btn.classList.add('active');
+            toggleSidebar();
+        }
+
+        document.getElementById('activeSource').innerText = `TOP STORIES | ${apiMap[key].name.toUpperCase()}`;
+
+        grid.innerHTML = Array(6).fill(`
+            <div class="news-card">
+                <div class="img-wrap skeleton"></div>
+                <div class="card-content">
+                    <div class="skeleton" style="height:25px; width:90%; margin-bottom:12px;"></div>
+                    <div class="skeleton" style="height:40px; width:100%;"></div>
+                </div>
+            </div>
+        `).join('');
+
+        try {
+            const res = await fetch(apiMap[key].url);
+            const data = await res.json();
+            const items = data.result || data.data || [];
+            renderGrid(items);
+            updateTicker(items);
+        } catch (err) {
+            grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; padding:50px;">දත්ත පූරණය කළ නොහැක.</p>`;
+        }
+    }
+
+    function renderGrid(data) {
+        const grid = document.getElementById('newsGrid');
+        grid.innerHTML = data.map(item => `
+            <article class="news-card">
+                <div class="img-wrap">
+                    <img src="${item.image || item.img || 'https://via.placeholder.com/500x300?text=Raviya+News'}" loading="lazy">
+                    <span class="src-badge">${apiMap[activeKey].name}</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">${item.title}</h3>
+                    <p class="card-desc">${(item.description || item.desc || '').substring(0, 110)}...</p>
+                </div>
+                <div class="card-footer">
+                    <a href="${item.url || item.link}" target="_blank" class="read-more-btn">READ MORE →</a>
+                </div>
+            </article>
+        `).join('');
+    }
+
+    function updateTicker(items) {
+        const ticker = document.getElementById('ticker-content');
+        if(items.length > 0) {
+            ticker.innerText = items.slice(0, 5).map(i => i.title).join(' • ') + " • RAVIYA NEWS LIVE • ";
+        }
+    }
+
+    function toggleTheme() {
+        const body = document.body;
+        const isDark = body.getAttribute('data-theme') === 'dark';
+        body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        document.getElementById('mode-text').innerText = isDark ? '🌙 DARK MODE' : '☀️ LIGHT MODE';
+    }
+
+    window.onload = async () => {
+        await loadNews('derana');
+        setTimeout(() => {
+            const splash = document.getElementById('splash');
+            splash.style.opacity = '0';
+            setTimeout(() => splash.style.display = 'none', 800);
+        }, 1800);
+    };
+</script>
+</body>
+</html>
